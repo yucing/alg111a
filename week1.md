@@ -18,3 +18,7 @@
 ## 參考資料
 * [維基百科](https://zh.wikipedia.org/zh-tw/%E5%A4%A7O%E7%AC%A6%E5%8F%B7)
 * [iT邦幫忙](https://ithelp.ithome.com.tw/articles/10213615)
+
+# 遞迴 v.s 查表
+* fibonacci
+* Cnk
