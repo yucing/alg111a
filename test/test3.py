@@ -20,9 +20,9 @@ answer = [0, 0, 0, 0, 0]
 # 主程式
 def Climbing():
     failCount = 0
-    while failCount < 100:
-        dh = random.randint(0,h)
+    while failCount < 1000:
         for i in range(max_num):
+            dh = random.randint(0,h)
             current_temp1[i] += dh
             current_temp2[i] -= dh
             a = Count(current_temp1)
