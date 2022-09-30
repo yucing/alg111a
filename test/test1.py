@@ -78,6 +78,5 @@ def last():
             if temp >= maxs[i]:
                 return False
     return True
-        
 
 Climbing(answer)
