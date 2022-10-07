@@ -1,7 +1,9 @@
 # A = 65
 # ord() -> 取得ascii
 # chr() -> ascii轉成字元
-
+'''list_a = [97,98]
+for i in list_a:
+    print(chr(i))'''
 count = 1
 C = []
 

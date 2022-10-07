@@ -1,7 +1,9 @@
 # A = 65
 # ord() -> 取得ascii
 # chr() -> ascii轉成字元
-
+'''list_a = [97,98]
+for i in list_a:
+    print(chr(i))'''
 count = 1
 C = []
 
@@ -33,15 +35,18 @@ def answer(co, k, n, Loop):
     return answer(co, k, n, Loop)
 
 def La(temp, k, n, Loop, ktt):
-    if ktt > k:
-        return
+    if Loop >= k:
+        return 
     for j in range(Loop + 1, n):
         ktt += 1
         temp.append(C[j])
         if ktt < k:
-            La(temp, k, n, Loop + 1, ktt)
+            return La(temp, k, n, Loop + 1, ktt)
         if len(temp) == k:
             print(temp)
         temp.pop()
+    if len(temp) != 1:
+        temp.pop()
+    return La(temp, k, n, Loop, 1)
 
-main(4,2)
+main(4,3)
