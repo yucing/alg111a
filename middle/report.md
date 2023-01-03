@@ -1,10 +1,11 @@
 # Clique problem
 ## [clique problem](https://zh.m.wikipedia.org/zh-hant/%E5%88%86%E5%9C%98%E5%95%8F%E9%A1%8C)
 * 圖論中的一個NP-complete問題
-* clique 是一個途中兩兩相霖的一個頂點集，或是一個完全子圖
+* clique 是一個途中兩兩相鄰的一個頂點集，或是一個完全子圖
 
 ![](https://github.com/yucing/alg111a/blob/main/picture/1.png)
 
+# 程式由 Chat GPT 修改
 # 暴力法
 ## 由 Chat GPT產生
 ### 程式
@@ -91,3 +92,130 @@ print(output)
 ```
 [['A', 'B', 'C']]
 ```
+
+# Bron-Kerbosch 演算法
+## 由 Chat GPT產生
+### 程式
+```py
+def bron_kerbosch(G, R, P, X):
+  if not any((P, X)):
+    yield R
+  # 將 P 集合複製到新的集合 P2 中
+  P2 = {v for v in P}
+  # 遍歷 P2 集合
+  for v in P2:
+    bron_kerbosch(G, R + [v], P & G[v], X & G[v])
+    # 將 v 從 P 中移除，並加入 X 中
+    P.difference_update(v)
+    X.update(v)
+
+def find_cliques(G):
+  for vertex in G:
+    neighbors = G[vertex]
+    for clique in bron_kerbosch(G, [vertex], neighbors, set()):
+      yield clique
+
+G = {
+  'A': set(['B', 'C']),
+  'B': set(['A', 'C']),
+  'C': set(['A', 'B']),
+  'D': set(['C', 'E']),
+  'E': set(['D'])
+}
+
+cliques = [clique for clique in find_cliques(G)]
+print(cliques)  # [['A', 'B', 'C'], ['C', 'D', 'E']]
+
+```
+### 輸出
+```
+[]
+```
+
+### 問題
+* 當求解的圖不是一個完全圖時，程式碼可能會回傳不正確的答案
+* 因為 Bron-Kerbosch 演算法是假設輸入的圖是一個完全圖
+
+## 以下是更改後的程式
+### 程式
+```py
+ans = []
+def bron_kerbosch(G, R, P, X):
+    #print('R=',R)
+    #print('P=',P)
+    #print('X=',X)
+    if not any((P, X)):
+        R = sorted(R)
+        ans.append(R)
+        for k in range(len(ans)-1):
+            if R == ans[k]:
+                ans.pop()
+                break
+        #print(ans)
+    elif not any((P)) and any((X)):
+        return
+    else:
+        P2 = [each_vertex for each_vertex in P]
+        for each_vertex in P2:
+            #print('each_vertex=',each_vertex)
+            #print('G[each_vertex]=',G[each_vertex])
+            #print('R+[each_vertex]=',R+[each_vertex])
+            #print('P & G[each_vertex]=',P & G[each_vertex])
+            #print('X & G[each_vertex]=',X & G[each_vertex])
+            if not any((G[each_vertex])):
+                break
+            bron_kerbosch(G, R + [each_vertex], P & G[each_vertex], X & G[each_vertex])
+            P.remove(each_vertex)
+            X.add(each_vertex)
+    
+
+
+def find_cliques(G):
+    for vertex in G:
+        neighbors = G[vertex]
+        bron_kerbosch(G, [vertex], neighbors, set())
+
+
+G = {
+  'A': set(['B', 'C']),
+  'B': set(['A', 'C']),
+  'C': set(['A', 'B']),
+  'D': set(['C', 'E']),
+  'E': set(['D'])
+}
+
+cliques = find_cliques(G)
+#print(cliques)  # [['A', 'B', 'C'], ['C', 'D', 'E']]
+
+print(ans)
+
+```
+### 輸出
+```
+[['A', 'B', 'C'], ['C', 'D'], ['D', 'E']]
+```
+
+# 圖形繪製
+```py
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# 建立一個空的無向圖
+G = nx.Graph()
+
+# 加入圖中的結點
+G.add_nodes_from(['A', 'B', 'C', 'D', 'E'])
+
+# 加入圖中的邊
+G.add_edges_from([('A', 'B'), ('A', 'C'), ('B', 'C'), ('C', 'D'), ('D', 'E')])
+
+# 將圖畫出來
+nx.draw(G, with_labels=True)
+
+# 顯示圖形
+plt.show()
+
+```
+
+# 參考資料
+## [極大團算法](https://www.jianshu.com/p/437bd6936dad)
